@@ -1,0 +1,173 @@
+/* eslint-disable  func-names */
+/* eslint quote-props: ["error", "consistent"]*/
+/**
+ * This sample demonstrates a simple skill built with the Amazon Alexa Skills
+ * nodejs skill development kit.
+ * This sample supports multiple lauguages. (en-US, en-GB, de-DE).
+ * The Intent Schema, Custom Slots and Sample Utterances for this skill, as well
+ * as testing instructions are located at https://github.com/alexa/skill-sample-nodejs-fact
+ **/
+
+'use strict';
+const Alexa = require('alexa-sdk');
+
+//=========================================================================================================================================
+//TODO: The items below this comment need your attention.
+//=========================================================================================================================================
+
+//Replace with your app ID (OPTIONAL).  You can find this value at the top of your skill's page on http://developer.amazon.com.
+//Make sure to enclose your value in quotes, like this: const APP_ID = 'amzn1.ask.skill.bb4045e6-b3e8-4133-b650-72923c5980f1';
+const APP_ID = undefined;
+
+const SKILL_NAME = 'Random Facts';
+const GET_FACT_MESSAGE = "Here's your fact: ";
+const HELP_MESSAGE = 'You can say tell me a Random fact, or, you can say exit... What can I help you with?';
+const HELP_REPROMPT = 'What can I help you with?';
+const STOP_MESSAGE = 'Goodbye!';
+
+//=========================================================================================================================================
+//TODO: Replace this data with your own.  You can find translations of this data at http://github.com/alexa/skill-sample-node-js-fact/data
+//=========================================================================================================================================
+const data = [
+    'A year on Mercury is just 88 days long.',
+    'Despite being farther from the Sun, Venus experiences higher temperatures than Mercury.',
+    'Venus rotates counter-clockwise, possibly because of a collision in the past with an asteroid.',
+    'On Mars, the Sun appears about half the size as it does on Earth.',
+    'Earth is the only planet not named after a god.',
+    'Jupiter has the shortest day of all the planets.',
+    'The Milky Way galaxy will collide with the Andromeda Galaxy in about 5 billion years.',
+    'The Sun contains 99.86% of the mass in the Solar System.',
+    'The Sun is an almost perfect sphere.',
+    'A total solar eclipse can happen once every 1 to 2 years. This makes them a rare event.',
+    'Saturn radiates two and a half times more energy into space than it receives from the sun.',
+    'The temperature inside the Sun can reach 15 million degrees Celsius.',
+    'The Moon is moving approximately 3.8 cm away from our planet every year.',
+     'The word “gorilla” is derived from a Greek word meaning, A tribe of hairy women.',
+ 'Prisoners in Canadian war camps during WWII were treated so well, that a lot of them didn’t’ want to leave when the war was over.',
+ 'Gorillas burp when they are happy.',
+ 'In New York, it is illegal to sell a haunted house without telling the buyer.',
+ 'In 2006 someone tried to sell New Zealand on eBay. The price got up to $3,000 before eBay shut it down.',
+ 'It is considered good luck in Japan when a sumo wrestler makes your baby cry.',
+ 'A man from Britain changed his name to Tim Pppppppppprice to make it harder for telemarketers to pronounce.',
+' A woman from California once tried to sue the makers of Cap’n Crunch, because the Crunch Berries contained no berries of any kind.',
+ 'vApple launched a clothing line in 1986. It was described as a train wreck by others.',
+ 'In Japan, crooked teeth are considered cute and attractive.',
+ 'A Swedish woman lost her wedding ring, and found it 16 years later- growing on a carrot in her garden.',
+ 'Donald duck comics were banned from Finland because he doesn’t wear pants.',
+ 'The chance of you dying on the way to get lottery tickets is actually greater than your chance of winning.',
+ 'Cherophobia is the fear of fun.',
+' The toothpaste “Colgate” in Spanish translates to go hang yourself.',
+' Pirates wore earrings because they believed it improved their eyesight.',
+'Human birth control pills work on gorillas.',
+ 'There are no clocks in Las Vegas gambling casinos.',
+ 'Beetles taste like apples, wasps like pine nuts, and worms like fried bacon.',
+ 'What is called a “French kiss” in the English-speaking world is known as an “English kiss” in France.',
+' Months that begin on a Sunday will always have a Friday the 13th.',
+' The placement of a donkey’s eyes in its’ heads enables it to see all four feet at all times!',
+' Some worms will eat themselves if they can’t find any food!',
+' Dolphins sleep with one eye open!.',
+' It is impossible to sneeze with your eyes open.',
+' In France, it is legal to marry a dead person.',
+ ' Russia has a larger surface area than Pluto.',
+ ' There’s an opera house on the U.S.–Canada border where the stage is in one country and half the audience is in another.',
+ 'The harder you concentrate on falling asleep, the less likely to fall asleep.',
+ 'You can’t hum while holding your nose closed.',
+ 'Women have twice as many pain receptors on their body than men. But a much higher pain tolerance.',
+ 'There are more stars in space than there are grains of sand on every beach in the world.',
+ 'For every human on Earth there are 1.6 million ants.',
+' The total weight of all those ants, however, is about the same as all the humans.',
+' On Jupiter and Saturn it rains diamonds.',
+ ' Human thigh bones are stronger than concrete.',
+ ' Cockroaches can live for several weeks with their heads cut off, because their brains are located inside their body. They would eventually die from being unable to eat.',
+ ' Scientists have tracked butterflies that travel over 3,000 miles.',
+ ' To produce a single pound of honey, a single bee would have to visit 2 million flowers.',
+ ' The population is expected to rise to 10.8 billion by the year 2080.',
+ ' You breathe on average about 8,409,600 times a year.',
+ ' More than 60,000 people are flying over the United States in an airplane right now.',
+ ' Hamsters run up to 8 miles at night on a wheel.',
+ ' A waterfall in Hawaii goes up sometimes instead of down.',
+ ' A church in the Czech Republic has a chandelier made entirely of human bones.',
+ ' Under the Code of Hammurabi, bartenders who watered down beer were punished by execution.',
+ ' Our eyes are always the same size from birth, but our nose and ears never stop growing.',
+ ' During your lifetime, you will produce enough saliva to fill two swimming pools.',
+ ' You are 1% shorter in the evening than in the morning.',
+'  The elephant is the only mammal that can’t jump!',
+'  Most dust particles in your house are made from dead skin.',
+ ' Sea otters hold hands when they sleep so that they do not drift apart.',
+' The Golden Poison Dart Frog’s skin has enough toxins to kill 100 people.',
+' The male ostrich can roar just like a lion.',
+' Mountain lions can whistle.',
+' The giraffe’s tongue is so long that they can lick the inside of their own ear.',
+' Cows kill more people than sharks do.',
+' Cats have 32 muscles in each of their ears.',
+' Butterflies taste their food with their feet.',
+' A tarantula can live without food for more than two years.',
+' The tongue of a blue whale weighs more than most elephants!',
+' Ever wonder where the phrase “It’s raining cats and dogs” comes from? In the 17th century many homeless cats and dogs would drown and float down the streets of England, making it look like it literally rained cats and dogs.',
+'It takes about 3,000 cows to supply enough leather for the NFL for only one year.',
+'Male dogs lift their legs when they are urinating for a reason. They are trying to leave their mark higher so that it gives off the message that they are tall and intimidating.',
+' A hummingbird weighs less than a penny.',
+'An ostrich’s eye is bigger than its brain.',
+'Dogs are capable of understanding up to 250 words and gestures and have demonstrated the ability to do simple mathematical calculations.',
+' A sheep, a duck and a rooster were the first passengers in a hot air balloon.',
+' Birds don’t urinate.',
+ 'A flea can jump up to 200 times its own height. That is the equivalent of a human jumping the Empire State Building.',
+ 'There are 5 temples in Kyoto, Japan that have blood stained ceilings. The ceilings are made from the floorboards of a castle where warriors killed themselves after a long hold-off against an army. To this day, you can still see the outlines and footprints.',
+ 'There is a snake, called the boomslang, whose venom causes you to bleed out from every orifice on your body. You may even turn blue from internal bleeding, and it can take up to 5 days to die from the bleeding.',
+' A ball of glass will bounce higher than a ball of rubber.',
+' Saturn’s density is low enough that the planet would float in water.',
+' 68% of the universe is dark energy, and 27% is dark matter; both are invisible, even with our powerful telescopes. This means we have only seen 5% of the universe from earth.',
+' The founders of Google were willing to sell Google for $1 million to Excite in 1999, but Excite turned them down. Google is now worth $527 Billion.',
+' In the past 20 years, scientists have found over 1,000 planets outside of our solar system.',
+' There are 60,000 miles of blood vessels in the human body.',
+' If a pregnant woman has organ damage, the baby in her womb sends stem cells to help repair the organ.',
+' If you started with $0.01 and doubled your money every day, it would take 27 days to become a millionaire.',
+' Only one person in two billion will live to be 116 or older.',
+' A person can live without food for about a month, but only about a week without water.',
+'If the amount of water in your body is reduced by just 1%, you’ll feel thirsty.',
+'If it’s reduced by 10%, you’ll die.',
+' On average, 12 newborns will be given to the wrong parents daily.',
+' You can’t kill yourself by holding your breath.',
+];
+
+//=========================================================================================================================================
+//Editing anything below this line might break your skill.
+//=========================================================================================================================================
+
+const handlers = {
+    'LaunchRequest': function () {
+        this.emit('GetNewFactIntent');
+    },
+    'GetNewFactIntent': function () {
+        const factArr = data;
+        const factIndex = Math.floor(Math.random() * factArr.length);
+        const randomFact = factArr[factIndex];
+        const speechOutput = GET_FACT_MESSAGE + randomFact;
+
+        this.response.cardRenderer(SKILL_NAME, randomFact);
+        this.response.speak(speechOutput);
+        this.emit(':responseReady');
+    },
+    'AMAZON.HelpIntent': function () {
+        const speechOutput = HELP_MESSAGE;
+        const reprompt = HELP_REPROMPT;
+
+        this.response.speak(speechOutput).listen(reprompt);
+        this.emit(':responseReady');
+    },
+    'AMAZON.CancelIntent': function () {
+        this.response.speak(STOP_MESSAGE);
+        this.emit(':responseReady');
+    },
+    'AMAZON.StopIntent': function () {
+        this.response.speak(STOP_MESSAGE);
+        this.emit(':responseReady');
+    },
+};
+
+exports.handler = function (event, context, callback) {
+    const alexa = Alexa.handler(event, context, callback);
+    alexa.APP_ID = APP_ID;
+    alexa.registerHandlers(handlers);
+    alexa.execute();
+};
