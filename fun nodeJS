@@ -1,0 +1,99 @@
+/* eslint-disable  func-names */
+/* eslint quote-props: ["error", "consistent"]*/
+/**
+ * This sample demonstrates a simple skill built with the Amazon Alexa Skills
+ * nodejs skill development kit.
+ * This sample supports multiple lauguages. (en-US, en-GB, de-DE).
+ * The Intent Schema, Custom Slots and Sample Utterances for this skill, as well
+ * as testing instructions are located at https://github.com/alexa/skill-sample-nodejs-fact
+ **/
+
+'use strict';
+const Alexa = require('alexa-sdk');
+
+//=========================================================================================================================================
+//TODO: The items below this comment need your attention.
+//=========================================================================================================================================
+
+//Replace with your app ID (OPTIONAL).  You can find this value at the top of your skill's page on http://developer.amazon.com.
+//Make sure to enclose your value in quotes, like this: const APP_ID = 'amzn1.ask.skill.bb4045e6-b3e8-4133-b650-72923c5980f1';
+const APP_ID = undefined;
+
+const SKILL_NAME = 'FunFacts';
+const GET_FACT_MESSAGE = "Here's your fact: ";
+const HELP_MESSAGE = 'You can say tell me a fun fact, or, you can say exit... What can I help you with?';
+const HELP_REPROMPT = 'What can I help you with?';
+const STOP_MESSAGE = 'Goodbye!';
+
+//=========================================================================================================================================
+//TODO: Replace this data with your own.  You can find translations of this data at http://github.com/alexa/skill-sample-node-js-fact/data
+//=========================================================================================================================================
+const data = [
+'The world’s oldest piece of chewing gum is over 9,000 years old!',
+'A coyote can hear a mouse moving underneath a foot of snow.',
+'Bolts of lightning can shoot out of an erupting volcano.',
+'New York drifts about one inch farther away from London each year.',
+'A U.Sdollar bill can be folded approximately 4,000 times in the same place before it will tear.',
+'A sneeze travels about 100 miles per hour.',
+'Earth has traveled more than 5,000 miles in the past 5 minutes.',
+'It would take a sloth one month to travel one mile.',
+'10% of the World’s population is left handed.',
+'A broken clock is right two times every day.',
+'According to Amazon, the most highlighted books on Kindle are the Bible, the Steve Jobs biography, and The Hunger Games.',
+'Bob Marley’s last words to his son before he died were “Money can’t buy life.',
+'A mole can dig a tunnel that is 300 feet long in only one night.',
+'A hippo’s wide open mouth is big enough to fit a 4-foot-tall child in.',
+'Chewing gum while you cut an onion will help keep you from crying.',
+'If you were to stretch a Slinky out until it’s flat, it would measure 87 feet long.',
+'Al Capone’s business card said he was a used furniture dealer.',
+'There are more collect calls on Father’s Day than on any other day of the year.',
+'Banging your head against a wall burns 150 calories an hour.',
+'95% of people text things they could never say in person.',
+'A crocodile can’t poke its tongue out.',
+'It is physically impossible for pigs to look up into the sky.',
+'Guinness Book of Records holds the record for being the book most often stolen from Public Libraries.',
+
+
+];
+
+//=========================================================================================================================================
+//Editing anything below this line might break your skill.
+//=========================================================================================================================================
+
+const handlers = {
+    'LaunchRequest': function () {
+        this.emit('GetNewFactIntent');
+    },
+    'GetNewFactIntent': function () {
+        const factArr = data;
+        const factIndex = Math.floor(Math.random() * factArr.length);
+        const randomFact = factArr[factIndex];
+        const speechOutput = GET_FACT_MESSAGE + randomFact;
+
+        this.response.cardRenderer(SKILL_NAME, randomFact);
+        this.response.speak(speechOutput);
+        this.emit(':responseReady');
+    },
+    'AMAZON.HelpIntent': function () {
+        const speechOutput = HELP_MESSAGE;
+        const reprompt = HELP_REPROMPT;
+
+        this.response.speak(speechOutput).listen(reprompt);
+        this.emit(':responseReady');
+    },
+    'AMAZON.CancelIntent': function () {
+        this.response.speak(STOP_MESSAGE);
+        this.emit(':responseReady');
+    },
+    'AMAZON.StopIntent': function () {
+        this.response.speak(STOP_MESSAGE);
+        this.emit(':responseReady');
+    },
+};
+
+exports.handler = function (event, context, callback) {
+    const alexa = Alexa.handler(event, context, callback);
+    alexa.APP_ID = APP_ID;
+    alexa.registerHandlers(handlers);
+    alexa.execute();
+};
