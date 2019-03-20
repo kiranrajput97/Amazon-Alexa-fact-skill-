@@ -1,0 +1,42 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "mind blowing facts",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "GetNewFactIntent",
+                    "slots": [],
+                    "samples": [
+                        "a fact",
+                        "a Mind Blowing fact",
+                        "tell me a fact",
+                        "tell me a Mind Blowing fact",
+                        "give me a fact",
+                        "give me a Mind Blowing fact",
+                        "tell me trivia",
+                        "tell me a Mind Blowing trivia",
+                        "give me trivia",
+                        "give me a Mind Blowing trivia"
+                    ]
+                }
+            ],
+            "types": []
+        }
+    }
+}
