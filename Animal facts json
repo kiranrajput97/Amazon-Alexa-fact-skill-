@@ -1,0 +1,43 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "animal facts",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "GetNewFactIntent",
+                    "slots": [],
+                    "samples": [
+                        "a fact",
+                        "a Animal fact",
+                        "tell me a fact",
+                        "tell me a Animal fact",
+                        "give me a fact",
+                        "give me a Animal fact",
+                        "tell me trivia",
+                        "tell me a Animal trivia",
+                        "give me trivia",
+                        "give me a Animal trivia",
+                        "give me some information"
+                    ]
+                }
+            ],
+            "types": []
+        }
+    }
+}
