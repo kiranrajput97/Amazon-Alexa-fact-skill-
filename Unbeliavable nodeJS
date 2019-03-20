@@ -1,0 +1,90 @@
+/* eslint-disable  func-names */
+/* eslint quote-props: ["error", "consistent"]*/
+/**
+ * This sample demonstrates a simple skill built with the Amazon Alexa Skills
+ * nodejs skill development kit.
+ * This sample supports multiple lauguages. (en-US, en-GB, de-DE).
+ * The Intent Schema, Custom Slots and Sample Utterances for this skill, as well
+ * as testing instructions are located at https://github.com/alexa/skill-sample-nodejs-fact
+ **/
+
+'use strict';
+const Alexa = require('alexa-sdk');
+
+//=========================================================================================================================================
+//TODO: The items below this comment need your attention.
+//=========================================================================================================================================
+
+//Replace with your app ID (OPTIONAL).  You can find this value at the top of your skill's page on http://developer.amazon.com.
+//Make sure to enclose your value in quotes, like this: const APP_ID = 'amzn1.ask.skill.bb4045e6-b3e8-4133-b650-72923c5980f1';
+const APP_ID = undefined;
+
+const SKILL_NAME = ' Unbelievable Facts';
+const GET_FACT_MESSAGE = "Here's your fact: ";
+const HELP_MESSAGE = 'You can say tell me a  Unbelievable fact, or, you can say exit... What can I help you with?';
+const HELP_REPROMPT = 'What can I help you with?';
+const STOP_MESSAGE = 'Goodbye!';
+
+//=========================================================================================================================================
+//TODO: Replace this data with your own.  You can find translations of this data at http://github.com/alexa/skill-sample-node-js-fact/data
+//=========================================================================================================================================
+const data = [
+   ' Human thigh bones are stronger than concrete.',
+ ' Cockroaches can live for several weeks with their heads cut off, because their brains are located inside their body. They would eventually die from being unable to eat.',
+ ' Scientists have tracked butterflies that travel over 3,000 miles.',
+ ' To produce a single pound of honey, a single bee would have to visit 2 million flowers.',
+ ' The population is expected to rise to 10.8 billion by the year 2080.',
+ ' You breathe on average about 8,409,600 times a year.',
+ ' More than 60,000 people are flying over the United States in an airplane right now.',
+ ' Hamsters run up to 8 miles at night on a wheel.',
+ ' A waterfall in Hawaii goes up sometimes instead of down.',
+ ' A church in the Czech Republic has a chandelier made entirely of human bones.',
+ ' Under the Code of Hammurabi, bartenders who watered down beer were punished by execution.',
+ ' Our eyes are always the same size from birth, but our nose and ears never stop growing.',
+ ' During your lifetime, you will produce enough saliva to fill two swimming pools.',
+ ' You are 1% shorter in the evening than in the morning.',
+'  The elephant is the only mammal that can’t jump!',
+'  Most dust particles in your house are made from dead skin.',
+];
+
+//=========================================================================================================================================
+//Editing anything below this line might break your skill.
+//=========================================================================================================================================
+
+const handlers = {
+    'LaunchRequest': function () {
+        this.emit('GetNewFactIntent');
+    },
+    'GetNewFactIntent': function () {
+        const factArr = data;
+        const factIndex = Math.floor(Math.random() * factArr.length);
+        const randomFact = factArr[factIndex];
+        const speechOutput = GET_FACT_MESSAGE + randomFact;
+
+        this.response.cardRenderer(SKILL_NAME, randomFact);
+        this.response.speak(speechOutput);
+        this.emit(':responseReady');
+    },
+    'AMAZON.HelpIntent': function () {
+        const speechOutput = HELP_MESSAGE;
+        const reprompt = HELP_REPROMPT;
+
+        this.response.speak(speechOutput).listen(reprompt);
+        this.emit(':responseReady');
+    },
+    'AMAZON.CancelIntent': function () {
+        this.response.speak(STOP_MESSAGE);
+        this.emit(':responseReady');
+    },
+    'AMAZON.StopIntent': function () {
+        this.response.speak(STOP_MESSAGE);
+        this.emit(':responseReady');
+    },
+};
+
+exports.handler = function (event, context, callback) {
+    const alexa = Alexa.handler(event, context, callback);
+    alexa.APP_ID = APP_ID;
+    alexa.registerHandlers(handlers);
+    alexa.execute();
+};
