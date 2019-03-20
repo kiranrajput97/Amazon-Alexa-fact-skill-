@@ -1,0 +1,91 @@
+/* eslint-disable  func-names */
+/* eslint quote-props: ["error", "consistent"]*/
+/**
+ * This sample demonstrates a simple skill built with the Amazon Alexa Skills
+ * nodejs skill development kit.
+ * This sample supports multiple lauguages. (en-US, en-GB, de-DE).
+ * The Intent Schema, Custom Slots and Sample Utterances for this skill, as well
+ * as testing instructions are located at https://github.com/alexa/skill-sample-nodejs-fact
+ **/
+
+'use strict';
+const Alexa = require('alexa-sdk');
+
+//=========================================================================================================================================
+//TODO: The items below this comment need your attention.
+//=========================================================================================================================================
+
+//Replace with your app ID (OPTIONAL).  You can find this value at the top of your skill's page on http://developer.amazon.com.
+//Make sure to enclose your value in quotes, like this: const APP_ID = 'amzn1.ask.skill.bb4045e6-b3e8-4133-b650-72923c5980f1';
+const APP_ID = 'amzn1.ask.skill.d6730849-0bfd-4259-9b83-be04455d5b56';
+
+const SKILL_NAME = 'Nutrition Facts';
+const GET_FACT_MESSAGE = "Here's your fact: ";
+const HELP_MESSAGE = 'You can say tell me a Nutrition fact, or, you can say exit... What can I help you with?';
+const HELP_REPROMPT = 'What can I help you with?';
+const STOP_MESSAGE = 'Goodbye!';
+
+//=========================================================================================================================================
+//TODO: Replace this data with your own.  You can find translations of this data at http://github.com/alexa/skill-sample-node-js-fact/data
+//=========================================================================================================================================
+const data = [
+    ' Drying fruit depletes it of 30-80% of its vitamin and antioxidant content.',
+    ' A 2010 study found that 48% of soda fountain contained fecal bacteria, and 11% contained EColi.',
+    '9 out of 10 Americans are deficient in Potassium.',
+    'Blueberries will not ripen until they are picked.',
+    'About 150 people per year are killed by coconuts.',
+    'Ketchup was used as a medicine back in the 1930’s.',
+    'Honey never spoils.',
+    'About half of all Americans are on a diet on any given day.',
+    'A hardboiled egg will spin, but a soft-boiled egg will not.',
+    'Avocados are poisonous to birds.',
+    'Chewing gum burns about 11 calories per hour.',
+    'The number of animals killed for meat every hour in the U.Sis 500,000.',
+    'If you try to suppress a sneeze, you can rupture a blood vessel in your head or neck and die.',
+    'Celery has negative calories! It takes more calories to eat a piece of celery than the celery has in it to begin withIt’s the same with apples!',
+    'More people are allergic to cow’s milk than any other food.',
+    'Only 8% of dieters will follow a restrictive weight loss plan (such as hCG Drops diet, garcinia cambogia diet, etc.',
+    'Coconut water can be used as blood plasma.',
+];
+
+//=========================================================================================================================================
+//Editing anything below this line might break your skill.
+//=========================================================================================================================================
+
+const handlers = {
+    'LaunchRequest': function () {
+        this.emit('GetNewFactIntent');
+    },
+    'GetNewFactIntent': function () {
+        const factArr = data;
+        const factIndex = Math.floor(Math.random() * factArr.length);
+        const randomFact = factArr[factIndex];
+        const speechOutput = GET_FACT_MESSAGE + randomFact;
+
+        this.response.cardRenderer(SKILL_NAME, randomFact);
+        this.response.speak(speechOutput);
+        this.emit(':responseReady');
+    },
+    'AMAZON.HelpIntent': function () {
+        const speechOutput = HELP_MESSAGE;
+        const reprompt = HELP_REPROMPT;
+
+        this.response.speak(speechOutput).listen(reprompt);
+        this.emit(':responseReady');
+    },
+    'AMAZON.CancelIntent': function () {
+        this.response.speak(STOP_MESSAGE);
+        this.emit(':responseReady');
+    },
+    'AMAZON.StopIntent': function () {
+        this.response.speak(STOP_MESSAGE);
+        this.emit(':responseReady');
+    },
+};
+
+exports.handler = function (event, context, callback) {
+    const alexa = Alexa.handler(event, context, callback);
+    alexa.APP_ID = APP_ID;
+    alexa.registerHandlers(handlers);
+    alexa.execute();
+};
