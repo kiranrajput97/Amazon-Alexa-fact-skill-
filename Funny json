@@ -1,0 +1,43 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "funny facts",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "GetNewFactIntent",
+                    "slots": [],
+                    "samples": [
+                        "a fact",
+                        "a funny fact",
+                        "tell me a fact",
+                        "tell me a funny fact",
+                        "give me a fact",
+                        "give me a funny fact",
+                        "give me a funny trivia",
+                        "give me some information",
+                        "give me some funny information",
+                        "tell me something",
+                        "give me something"
+                    ]
+                }
+            ],
+            "types": []
+        }
+    }
+}
