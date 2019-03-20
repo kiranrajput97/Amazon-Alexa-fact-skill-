@@ -1,0 +1,90 @@
+/* eslint-disable  func-names */
+/* eslint quote-props: ["error", "consistent"]*/
+/**
+ * This sample demonstrates a simple skill built with the Amazon Alexa Skills
+ * nodejs skill development kit.
+ * This sample supports multiple lauguages. (en-US, en-GB, de-DE).
+ * The Intent Schema, Custom Slots and Sample Utterances for this skill, as well
+ * as testing instructions are located at https://github.com/alexa/skill-sample-nodejs-fact
+ **/
+
+'use strict';
+const Alexa = require('alexa-sdk');
+
+//=========================================================================================================================================
+//TODO: The items below this comment need your attention.
+//=========================================================================================================================================
+
+//Replace with your app ID (OPTIONAL).  You can find this value at the top of your skill's page on http://developer.amazon.com.
+//Make sure to enclose your value in quotes, like this: const APP_ID = 'amzn1.ask.skill.bb4045e6-b3e8-4133-b650-72923c5980f1';
+const APP_ID = 'amzn1.ask.skill.c7310bbe-88c1-411e-9c19-b2ac48225e8c';
+
+const SKILL_NAME = 'Funny Facts';
+const GET_FACT_MESSAGE = "Here's your fact: ";
+const HELP_MESSAGE = 'You can say tell me a Funny fact, or, you can say exit... What can I help you with?';
+const HELP_REPROMPT = 'What can I help you with?';
+const STOP_MESSAGE = 'Goodbye!';
+
+//=========================================================================================================================================
+//TODO: Replace this data with your own.  You can find translations of this data at http://github.com/alexa/skill-sample-node-js-fact/data
+//=========================================================================================================================================
+const data = [
+     'The word “gorilla” is derived from a Greek word meaning, A tribe of hairy women.',
+ 'Prisoners in Canadian war camps during WWII were treated so well, that a lot of them didn’t’ want to leave when the war was over.',
+ 'Gorillas burp when they are happy.',
+ 'In New York, it is illegal to sell a haunted house without telling the buyer.',
+ 'In 2006 someone tried to sell New Zealand on eBay. The price got up to $3,000 before eBay shut it down.',
+ 'It is considered good luck in Japan when a sumo wrestler makes your baby cry.',
+ 'A man from Britain changed his name to Tim Pppppppppprice to make it harder for telemarketers to pronounce.',
+' A woman from California once tried to sue the makers of Cap’n Crunch, because the Crunch Berries contained no berries of any kind.',
+ 'vApple launched a clothing line in 1986. It was described as a train wreck by others.',
+ 'In Japan, crooked teeth are considered cute and attractive.',
+ 'A Swedish woman lost her wedding ring, and found it 16 years later- growing on a carrot in her garden.',
+ 'Donald duck comics were banned from Finland because he doesn’t wear pants.',
+ 'The chance of you dying on the way to get lottery tickets is actually greater than your chance of winning.',
+ 'Cherophobia is the fear of fun.',
+' The toothpaste “Colgate” in Spanish translates to go hang yourself.',
+' Pirates wore earrings because they believed it improved their eyesight.',
+];
+
+//=========================================================================================================================================
+//Editing anything below this line might break your skill.
+//=========================================================================================================================================
+
+const handlers = {
+    'LaunchRequest': function () {
+        this.emit('GetNewFactIntent');
+    },
+    'GetNewFactIntent': function () {
+        const factArr = data;
+        const factIndex = Math.floor(Math.random() * factArr.length);
+        const randomFact = factArr[factIndex];
+        const speechOutput = GET_FACT_MESSAGE + randomFact;
+
+        this.response.cardRenderer(SKILL_NAME, randomFact);
+        this.response.speak(speechOutput);
+        this.emit(':responseReady');
+    },
+    'AMAZON.HelpIntent': function () {
+        const speechOutput = HELP_MESSAGE;
+        const reprompt = HELP_REPROMPT;
+
+        this.response.speak(speechOutput).listen(reprompt);
+        this.emit(':responseReady');
+    },
+    'AMAZON.CancelIntent': function () {
+        this.response.speak(STOP_MESSAGE);
+        this.emit(':responseReady');
+    },
+    'AMAZON.StopIntent': function () {
+        this.response.speak(STOP_MESSAGE);
+        this.emit(':responseReady');
+    },
+};
+
+exports.handler = function (event, context, callback) {
+    const alexa = Alexa.handler(event, context, callback);
+    alexa.APP_ID = APP_ID;
+    alexa.registerHandlers(handlers);
+    alexa.execute();
+};
