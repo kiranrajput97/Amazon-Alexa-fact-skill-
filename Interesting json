@@ -1,0 +1,43 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "interesting facts",
+            "intents": [
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "GetNewFactIntent",
+                    "slots": [],
+                    "samples": [
+                        "facts",
+                        "show me Interesting Facts",
+                        "tell me Interesting Facts",
+                        "give me Interesting Facts",
+                        "tell me a fact",
+                        "fact ",
+                        "give me a fact"
+                    ]
+                }
+            ],
+            "types": []
+        }
+    }
+}
