@@ -1,0 +1,92 @@
+/* eslint-disable  func-names */
+/* eslint quote-props: ["error", "consistent"]*/
+/**
+ * This sample demonstrates a simple skill built with the Amazon Alexa Skills
+ * nodejs skill development kit.
+ * This sample supports multiple lauguages. (en-US, en-GB, de-DE).
+ * The Intent Schema, Custom Slots and Sample Utterances for this skill, as well
+ * as testing instructions are located at https://github.com/alexa/skill-sample-nodejs-fact
+ **/
+
+'use strict';
+const Alexa = require('alexa-sdk');
+
+//=========================================================================================================================================
+//TODO: The items below this comment need your attention.
+//=========================================================================================================================================
+
+//Replace with your app ID (OPTIONAL).  You can find this value at the top of your skill's page on http://developer.amazon.com.
+//Make sure to enclose your value in quotes, like this: const APP_ID = 'amzn1.ask.skill.bb4045e6-b3e8-4133-b650-72923c5980f1';
+const APP_ID = undefined;
+
+const SKILL_NAME = 'Interesting Facts';
+const GET_FACT_MESSAGE = "Here's your fact: ";
+const HELP_MESSAGE = 'You can say tell me a Interesting fact, or, you can say exit... What can I help you with?';
+const HELP_REPROMPT = 'What can I help you with?';
+const STOP_MESSAGE = 'Goodbye!';
+
+//=========================================================================================================================================
+//TODO: Replace this data with your own.  You can find translations of this data at http://github.com/alexa/skill-sample-node-js-fact/data
+//=========================================================================================================================================
+const data = [
+    'If you somehow found a way to extract all of the gold from the bubbling core of our lovely little planet, you would be able to cover all of the land in a layer of gold up to your knees.',
+'McDonalds calls frequent buyers of their food heavy users.',
+'The average person spends 6 months of their lifetime waiting on a red light to turn green.',
+'The largest recorded snowflake was in Keogh, MT during year 887, and was 5 inches wide.',
+'You burn more calories sleeping than you do watching television.',
+'There are more lifeforms living on your skin than there are people on the planet.',
+'Southern sea otters have flaps of skin under their forelegs that act as pocketsWhen diving, they use these pouches to store rocks and food.',
+'In 386 a pig in France was executed by public hanging for the murder of a child.',
+'One in every five adults believe that aliens are hiding in our planet disguised as humans.',
+'If you believe that you’re truly one in a million, there are still approximately 7,84 more people out there just like you.',
+'A single cloud can weight more than  million pounds.',
+'A human will eat on average 70 assorted insects and 0 spiders while sleeping.',
+'James Buchanan, the 5th U.S president continuously bought slaves with his own money in order to free them.',
+'There are more possible iterations of a game of chess than there are atoms in the known universe.',
+'The average person walks the equivalent of three times around the world in a lifetime.',
+'Men are 6 times more likely to be struck by lightning than women.',
+'Coca-Cola would be green if coloring wasn’t added to it.',
+'You cannot snore and dream at the same time.',
+];
+
+//=========================================================================================================================================
+//Editing anything below this line might break your skill.
+//=========================================================================================================================================
+
+const handlers = {
+    'LaunchRequest': function () {
+        this.emit('GetNewFactIntent');
+    },
+    'GetNewFactIntent': function () {
+        const factArr = data;
+        const factIndex = Math.floor(Math.random() * factArr.length);
+        const randomFact = factArr[factIndex];
+        const speechOutput = GET_FACT_MESSAGE + randomFact;
+
+        this.response.cardRenderer(SKILL_NAME, randomFact);
+        this.response.speak(speechOutput);
+        this.emit(':responseReady');
+    },
+    'AMAZON.HelpIntent': function () {
+        const speechOutput = HELP_MESSAGE;
+        const reprompt = HELP_REPROMPT;
+
+        this.response.speak(speechOutput).listen(reprompt);
+        this.emit(':responseReady');
+    },
+    'AMAZON.CancelIntent': function () {
+        this.response.speak(STOP_MESSAGE);
+        this.emit(':responseReady');
+    },
+    'AMAZON.StopIntent': function () {
+        this.response.speak(STOP_MESSAGE);
+        this.emit(':responseReady');
+    },
+};
+
+exports.handler = function (event, context, callback) {
+    const alexa = Alexa.handler(event, context, callback);
+    alexa.APP_ID = APP_ID;
+    alexa.registerHandlers(handlers);
+    alexa.execute();
+};
